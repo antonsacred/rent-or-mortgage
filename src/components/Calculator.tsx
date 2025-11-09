@@ -257,6 +257,146 @@ export const Calculator = () => {
             <CalculatorResults inputs={inputs} />
           </div>
         </div>
+
+        <section className="mt-16 space-y-12">
+          <nav
+            aria-label="In-page navigation"
+            className="flex flex-wrap gap-3 rounded-xl border bg-background/80 p-4 text-sm font-medium"
+          >
+            <a className="text-primary underline-offset-2 hover:underline" href="#methodology">
+              Methodology
+            </a>
+            <a className="text-primary underline-offset-2 hover:underline" href="#compare-scenarios">
+              When to Rent vs Buy
+            </a>
+            <a className="text-primary underline-offset-2 hover:underline" href="#faq">
+              FAQ
+            </a>
+            <a className="text-primary underline-offset-2 hover:underline" href="#glossary">
+              Glossary
+            </a>
+          </nav>
+
+          <section id="methodology" className="space-y-4 rounded-2xl bg-card p-8 shadow-sm">
+            <h2 className="text-3xl font-semibold text-foreground">How we calculate rent vs buy</h2>
+            <p className="text-muted-foreground">
+              The calculator models a complete mortgage amortization schedule, yearly ownership
+              costs, rent inflation, and the opportunity cost of investing your down payment. Each
+              slider updates the projection instantly so you can evaluate conservative and aggressive
+              market conditions.
+            </p>
+            <ul className="list-disc space-y-2 pl-6 text-muted-foreground">
+              <li>
+                Mortgage payments use the standard fixed-rate formula and adjust monthly as loan
+                balances shrink.
+              </li>
+              <li>
+                Ownership costs bundle property tax, HOA dues, insurance, and repairs as a single
+                percentage of the current home value.
+              </li>
+              <li>
+                Rent grows based on the House & Rental Inflation slider, mirroring the same trend
+                used for home appreciation.
+              </li>
+              <li>
+                The investment account compounds annually and captures the cash flow difference
+                between renting and the mortgage payment.
+              </li>
+            </ul>
+            <p className="text-muted-foreground">
+              Because the model keeps every assumption transparent, you can cite the exact inputs in
+              mortgage applications, financial plans, or content marketing pieces.
+            </p>
+          </section>
+
+          <section id="compare-scenarios" className="grid gap-6 rounded-2xl bg-secondary/30 p-8 md:grid-cols-2">
+            <div>
+              <h3 className="text-2xl font-semibold text-primary">When buying makes sense</h3>
+              <p className="mt-2 text-muted-foreground">
+                Buying often wins when you can lock in a competitive interest rate, expect moderate
+                appreciation, and plan to stay in the property beyond the breakeven timeframe. Larger
+                down payments reduce PMI and shrink total interest charges, letting equity compound
+                faster than rent increases.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-2xl font-semibold text-destructive">When renting is smarter</h3>
+              <p className="mt-2 text-muted-foreground">
+                Renting tends to win if you relocate frequently, live in overheated markets, or can
+                reliably earn higher returns by investing the down payment. Use the Investment Return
+                slider to stress-test future bull or bear markets and check how sensitive your plan
+                is to opportunity cost.
+              </p>
+            </div>
+          </section>
+
+          <section id="faq" className="space-y-8 rounded-2xl bg-card p-8 shadow-sm">
+            <div>
+              <h2 className="text-3xl font-semibold text-foreground">Frequently asked questions</h2>
+              <p className="text-muted-foreground">
+                These answers provide extra context you can cite in blog posts or onboarding flows.
+              </p>
+            </div>
+            <article>
+              <h3 className="text-xl font-semibold text-foreground">Do I need to include PMI?</h3>
+              <p className="text-muted-foreground">
+                Private mortgage insurance is implicitly captured in the Ownership Costs slider. Set
+                the percentage slightly higher when your down payment is below 20% so the projection
+                mirrors PMI premiums plus maintenance.
+              </p>
+            </article>
+            <article>
+              <h3 className="text-xl font-semibold text-foreground">What growth rate should I use?</h3>
+              <p className="text-muted-foreground">
+                Start with the historical national average of 3–4% for home appreciation, then adjust
+                it to match your metro&apos;s Case-Shiller trend. The same slider feeds rent growth
+                to keep the comparison grounded in one macro scenario.
+              </p>
+            </article>
+            <article>
+              <h3 className="text-xl font-semibold text-foreground">Can I model variable-rate loans?</h3>
+              <p className="text-muted-foreground">
+                Variable loans are not modeled yet, but you can approximate them by inputting your
+                expected blended rate and shortening the Years to Compare slider to the fixed period.
+                Layer manual notes alongside this summary for underwriting use.
+              </p>
+            </article>
+          </section>
+
+          <section id="glossary" className="rounded-2xl bg-secondary/20 p-8">
+            <h2 className="text-3xl font-semibold text-foreground">Quick glossary</h2>
+            <dl className="mt-4 grid gap-6 md:grid-cols-2">
+              <div>
+                <dt className="font-semibold text-foreground">Opportunity cost</dt>
+                <dd className="text-muted-foreground">
+                  The foregone investment gains from tying cash up in a down payment and ongoing
+                  ownership expenses.
+                </dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-foreground">Equity</dt>
+                <dd className="text-muted-foreground">
+                  The market value of your home minus the remaining loan balance—shown in the
+                  calculator as “Equity Built”.
+                </dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-foreground">Total rent cost</dt>
+                <dd className="text-muted-foreground">
+                  All rent payments minus gains from investing the down payment and monthly cash flow
+                  spreads.
+                </dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-foreground">Total buy cost</dt>
+                <dd className="text-muted-foreground">
+                  Down payment, mortgage payments, and ownership costs minus the equity accrued over
+                  the comparison period.
+                </dd>
+              </div>
+            </dl>
+          </section>
+        </section>
       </div>
     </div>
   );

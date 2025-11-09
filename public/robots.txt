@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://rent-or-mortgage.afanasev.org/sitemap.xml
