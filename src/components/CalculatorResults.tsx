@@ -31,7 +31,6 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
       interestRate,
       loanTerm,
       monthlyRent,
-      propertyTaxRate,
       ownershipCostsRate,
       homeAppreciation,
       rentIncrease,
@@ -64,10 +63,8 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
         
         // Annual costs for buying
         const annualMortgage = monthlyMortgage * 12;
-        const annualPropertyTax = (currentHomeValue * propertyTaxRate) / 100;
         const annualOwnershipCosts = (currentHomeValue * ownershipCostsRate) / 100;
-        const totalAnnualBuyCost =
-          annualMortgage + annualPropertyTax + annualOwnershipCosts;
+        const totalAnnualBuyCost = annualMortgage + annualOwnershipCosts;
 
         cumulativeBuyCost += totalAnnualBuyCost;
 

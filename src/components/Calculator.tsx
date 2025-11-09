@@ -1,7 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { CalculatorResults } from "./CalculatorResults";
 
@@ -11,7 +10,6 @@ export interface CalculatorInputs {
   interestRate: number;
   loanTerm: number;
   monthlyRent: number;
-  propertyTaxRate: number;
   ownershipCostsRate: number;
   homeAppreciation: number;
   rentIncrease: number;
@@ -25,8 +23,7 @@ const defaultInputs: CalculatorInputs = {
   interestRate: 6.5,
   loanTerm: 30,
   monthlyRent: 2000,
-  propertyTaxRate: 1.2,
-  ownershipCostsRate: 1.5,
+  ownershipCostsRate: 2.7,
   homeAppreciation: 3,
   rentIncrease: 3,
   investmentReturn: 7,
@@ -39,6 +36,16 @@ export const Calculator = () => {
   const updateInput = (key: keyof CalculatorInputs, value: number) => {
     setInputs((prev) => ({ ...prev, [key]: value }));
   };
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
+
+  const annualOwnershipCost = (inputs.homePrice * inputs.ownershipCostsRate) / 100;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30 py-8 px-4">
@@ -124,36 +131,25 @@ export const Calculator = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <Label>Property Tax Rate (annual)</Label>
-                    <span className="text-sm font-semibold text-primary">
-                      {inputs.propertyTaxRate}%
-                    </span>
-                  </div>
-                  <Slider
-                    value={[inputs.propertyTaxRate]}
-                    onValueChange={([value]) => updateInput("propertyTaxRate", value)}
-                    min={0}
-                    max={3}
-                    step={0.1}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-start gap-2">
                     <Label>Total Ownership Costs (annual %)</Label>
-                    <span className="text-sm font-semibold text-primary">
-                      {inputs.ownershipCostsRate}%
-                    </span>
+                    <div className="text-right">
+                      <span className="text-sm font-semibold text-primary block">
+                        {inputs.ownershipCostsRate}%
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {formatCurrency(annualOwnershipCost)}/yr
+                      </span>
+                    </div>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Includes HOA, insurance, maintenance, repairs
+                    Includes property taxes, HOA, insurance, maintenance, repairs
                   </p>
                   <Slider
                     value={[inputs.ownershipCostsRate]}
                     onValueChange={([value]) => updateInput("ownershipCostsRate", value)}
                     min={0}
-                    max={5}
+                    max={6}
                     step={0.1}
                   />
                 </div>
