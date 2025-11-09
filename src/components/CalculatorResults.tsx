@@ -64,9 +64,6 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
 
     for (let year = 0; year <= yearsToCompare; year++) {
       if (year > 0) {
-        // Update home value with appreciation
-        currentHomeValue *= 1 + marketGrowthRate / 100;
-
         // Annual costs for buying (principal + interest actually paid this year)
         let annualMortgagePaid = 0;
         for (let month = 0; month < 12; month++) {
@@ -91,16 +88,19 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
         // Annual costs for renting
         const annualRent = currentRent * 12;
         cumulativeRentCost += annualRent;
-        
-        // Update investment balance (independent renter portfolio growth + cash flow differences)
-        investmentBalance *= 1 + investmentReturn / 100;
-        const mortgageRentDiff = annualMortgagePaid - annualRent;
-        if (mortgageRentDiff > 0) {
-          investmentBalance += mortgageRentDiff;
+
+        // Renter invests the yearly cash-flow advantage before market growth is applied
+        const cashFlowDifference = totalAnnualBuyCost - annualRent;
+        if (cashFlowDifference > 0) {
+          investmentBalance += cashFlowDifference;
         }
 
-        // Update rent for next year
+        // Update investment balance (independent renter portfolio growth)
+        investmentBalance *= 1 + investmentReturn / 100;
+
+        // Update rent and home value for next year
         currentRent *= 1 + marketGrowthRate / 100;
+        currentHomeValue *= 1 + marketGrowthRate / 100;
       }
 
       const equity = currentHomeValue - remainingLoanBalance;
