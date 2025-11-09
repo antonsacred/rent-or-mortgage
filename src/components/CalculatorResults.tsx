@@ -51,6 +51,7 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
           (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
 
     const yearlyData: YearData[] = [];
+    const initialMonthlyOwnershipCosts = ((homePrice * ownershipCostsRate) / 100) / 12;
     let cumulativeBuyCost = downPayment;
     let cumulativeRentCost = 0;
     const initialInvestment = downPayment;
@@ -133,6 +134,11 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
       totalBuyCashOut: cumulativeBuyCost,
       totalRentPaid: cumulativeRentCost,
       netInvestmentGain: finalNetInvestmentGain,
+      monthlyOwnershipCosts: initialMonthlyOwnershipCosts,
+      monthlyInvestmentContribution: Math.max(
+        0,
+        monthlyMortgage + initialMonthlyOwnershipCosts - monthlyRent,
+      ),
     };
   }, [inputs]);
 
@@ -252,19 +258,25 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
               </span>
             </div>
             <div className="flex justify-between items-center p-3 bg-secondary/50 rounded-lg">
+              <span className="text-sm font-medium">Monthly Ownership Costs</span>
+              <span className="text-lg font-semibold text-primary">
+                {formatCurrency(calculations.monthlyOwnershipCosts)}
+              </span>
+            </div>
+            <div className="flex justify-between items-center p-3 bg-secondary/50 rounded-lg">
               <span className="text-sm font-medium">Current Monthly Rent</span>
               <span className="text-lg font-semibold text-destructive">
                 {formatCurrency(inputs.monthlyRent)}
               </span>
             </div>
             <div className="flex justify-between items-center p-3 bg-secondary/50 rounded-lg">
-              <span className="text-sm font-medium">Monthly Mortgage Excess Invested</span>
+              <span className="text-sm font-medium">Monthly Cash Flow Invested</span>
               <span className="text-lg font-semibold text-accent">
-                {formatCurrency(Math.max(0, calculations.monthlyMortgage - inputs.monthlyRent))}
+                {formatCurrency(calculations.monthlyInvestmentContribution)}
               </span>
             </div>
             <p className="text-xs text-muted-foreground text-right">
-              Only invested when the mortgage payment exceeds monthly rent.
+              Only invested when mortgage plus ownership costs exceed monthly rent.
             </p>
           </div>
         </CardContent>

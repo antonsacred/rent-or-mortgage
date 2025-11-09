@@ -145,7 +145,7 @@ export const Calculator = () => {
 
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <Label id={ownershipCostsLabelId}>Total Ownership Costs (annual %)</Label>
+                    <Label id={ownershipCostsLabelId}>Ownership Costs (annual %)</Label>
                     <span className="text-sm font-semibold text-primary">
                       {inputs.ownershipCostsRate}% ({formatCurrency(annualOwnershipCost)}/yr)
                     </span>
