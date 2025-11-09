@@ -32,8 +32,7 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
       loanTerm,
       monthlyRent,
       ownershipCostsRate,
-      homeAppreciation,
-      rentIncrease,
+      marketGrowthRate,
       investmentReturn,
       yearsToCompare,
     } = inputs;
@@ -63,7 +62,7 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
     for (let year = 0; year <= yearsToCompare; year++) {
       if (year > 0) {
         // Update home value with appreciation
-        currentHomeValue *= 1 + homeAppreciation / 100;
+        currentHomeValue *= 1 + marketGrowthRate / 100;
 
         // Annual costs for buying (principal + interest actually paid this year)
         let annualMortgagePaid = 0;
@@ -92,7 +91,7 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
         investmentBalance *= 1 + investmentReturn / 100;
 
         // Update rent for next year
-        currentRent *= 1 + rentIncrease / 100;
+        currentRent *= 1 + marketGrowthRate / 100;
       }
 
       const equity = currentHomeValue - remainingLoanBalance;

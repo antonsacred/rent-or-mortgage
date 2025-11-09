@@ -11,8 +11,7 @@ export interface CalculatorInputs {
   loanTerm: number;
   monthlyRent: number;
   ownershipCostsRate: number;
-  homeAppreciation: number;
-  rentIncrease: number;
+  marketGrowthRate: number;
   investmentReturn: number;
   yearsToCompare: number;
 }
@@ -24,8 +23,7 @@ const defaultInputs: CalculatorInputs = {
   loanTerm: 30,
   monthlyRent: 2000,
   ownershipCostsRate: 2.7,
-  homeAppreciation: 3,
-  rentIncrease: 3,
+  marketGrowthRate: 3,
   investmentReturn: 7,
   yearsToCompare: 10,
 };
@@ -178,33 +176,20 @@ export const Calculator = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <Label>Expected Home Appreciation (annual)</Label>
+                  <div className="flex justify-between items-start gap-2">
+                    <Label>Market Growth Rate (annual)</Label>
                     <span className="text-sm font-semibold text-primary">
-                      {inputs.homeAppreciation}%
+                      {inputs.marketGrowthRate}%
                     </span>
                   </div>
+                  <p className="text-xs text-muted-foreground">
+                    Applies to both home appreciation and yearly rent increases
+                  </p>
                   <Slider
-                    value={[inputs.homeAppreciation]}
-                    onValueChange={([value]) => updateInput("homeAppreciation", value)}
-                    min={0}
-                    max={8}
-                    step={0.5}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <Label>Expected Rent Increase (annual)</Label>
-                    <span className="text-sm font-semibold text-destructive">
-                      {inputs.rentIncrease}%
-                    </span>
-                  </div>
-                  <Slider
-                    value={[inputs.rentIncrease]}
-                    onValueChange={([value]) => updateInput("rentIncrease", value)}
-                    min={0}
-                    max={8}
+                    value={[inputs.marketGrowthRate]}
+                    onValueChange={([value]) => updateInput("marketGrowthRate", value)}
+                    min={-2}
+                    max={10}
                     step={0.5}
                   />
                 </div>
