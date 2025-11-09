@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
@@ -30,6 +30,17 @@ const defaultInputs: CalculatorInputs = {
 
 export const Calculator = () => {
   const [inputs, setInputs] = useState<CalculatorInputs>(defaultInputs);
+  const homePriceLabelId = useId();
+  const downPaymentLabelId = useId();
+  const interestRateLabelId = useId();
+  const loanTermLabelId = useId();
+  const ownershipCostsLabelId = useId();
+  const ownershipCostsDescriptionId = useId();
+  const monthlyRentLabelId = useId();
+  const yearsToCompareLabelId = useId();
+  const marketGrowthLabelId = useId();
+  const marketGrowthDescriptionId = useId();
+  const investmentReturnLabelId = useId();
 
   const updateInput = (key: keyof CalculatorInputs, value: number) => {
     setInputs((prev) => ({ ...prev, [key]: value }));
@@ -66,12 +77,13 @@ export const Calculator = () => {
               <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <Label>Home Price</Label>
+                    <Label id={homePriceLabelId}>Home Price</Label>
                     <span className="text-sm font-semibold text-primary">
                       ${inputs.homePrice.toLocaleString()}
                     </span>
                   </div>
                   <Slider
+                    aria-labelledby={homePriceLabelId}
                     value={[inputs.homePrice]}
                     onValueChange={([value]) => updateInput("homePrice", value)}
                     min={100000}
@@ -82,12 +94,13 @@ export const Calculator = () => {
 
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <Label>Down Payment</Label>
+                    <Label id={downPaymentLabelId}>Down Payment</Label>
                     <span className="text-sm font-semibold text-primary">
                       {inputs.downPaymentPercent}% (${((inputs.homePrice * inputs.downPaymentPercent) / 100).toLocaleString()})
                     </span>
                   </div>
                   <Slider
+                    aria-labelledby={downPaymentLabelId}
                     value={[inputs.downPaymentPercent]}
                     onValueChange={([value]) => updateInput("downPaymentPercent", value)}
                     min={0}
@@ -98,12 +111,13 @@ export const Calculator = () => {
 
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <Label>Interest Rate</Label>
+                    <Label id={interestRateLabelId}>Interest Rate</Label>
                     <span className="text-sm font-semibold text-primary">
                       {inputs.interestRate}%
                     </span>
                   </div>
                   <Slider
+                    aria-labelledby={interestRateLabelId}
                     value={[inputs.interestRate]}
                     onValueChange={([value]) => updateInput("interestRate", value)}
                     min={2}
@@ -114,12 +128,13 @@ export const Calculator = () => {
 
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <Label>Loan Term (years)</Label>
+                    <Label id={loanTermLabelId}>Loan Term (years)</Label>
                     <span className="text-sm font-semibold text-primary">
                       {inputs.loanTerm} years
                     </span>
                   </div>
                   <Slider
+                    aria-labelledby={loanTermLabelId}
                     value={[inputs.loanTerm]}
                     onValueChange={([value]) => updateInput("loanTerm", value)}
                     min={10}
@@ -130,15 +145,17 @@ export const Calculator = () => {
 
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <Label>Total Ownership Costs (annual %)</Label>
+                    <Label id={ownershipCostsLabelId}>Total Ownership Costs (annual %)</Label>
                     <span className="text-sm font-semibold text-primary">
                       {inputs.ownershipCostsRate}% ({formatCurrency(annualOwnershipCost)}/yr)
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p id={ownershipCostsDescriptionId} className="text-xs text-muted-foreground">
                     Includes property taxes, HOA, insurance, maintenance, repairs
                   </p>
                   <Slider
+                    aria-labelledby={ownershipCostsLabelId}
+                    aria-describedby={ownershipCostsDescriptionId}
                     value={[inputs.ownershipCostsRate]}
                     onValueChange={([value]) => updateInput("ownershipCostsRate", value)}
                     min={0}
@@ -156,12 +173,13 @@ export const Calculator = () => {
               <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <Label>Monthly Rent</Label>
+                    <Label id={monthlyRentLabelId}>Monthly Rent</Label>
                     <span className="text-sm font-semibold text-destructive">
                       ${inputs.monthlyRent.toLocaleString()}
                     </span>
                   </div>
                   <Slider
+                    aria-labelledby={monthlyRentLabelId}
                     value={[inputs.monthlyRent]}
                     onValueChange={([value]) => updateInput("monthlyRent", value)}
                     min={500}
@@ -172,12 +190,13 @@ export const Calculator = () => {
 
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <Label>Years to Compare</Label>
+                    <Label id={yearsToCompareLabelId}>Years to Compare</Label>
                     <span className="text-sm font-semibold text-foreground">
                       {inputs.yearsToCompare} years
                     </span>
                   </div>
                   <Slider
+                    aria-labelledby={yearsToCompareLabelId}
                     value={[inputs.yearsToCompare]}
                     onValueChange={([value]) => updateInput("yearsToCompare", value)}
                     min={1}
@@ -195,15 +214,17 @@ export const Calculator = () => {
               <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <div className="flex justify-between items-start gap-2">
-                    <Label>House & Rental Inflation (annual)</Label>
+                    <Label id={marketGrowthLabelId}>House & Rental Inflation (annual)</Label>
                     <span className="text-sm font-semibold text-primary">
                       {inputs.marketGrowthRate}%
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p id={marketGrowthDescriptionId} className="text-xs text-muted-foreground">
                     Drives yearly changes for both home value and rent
                   </p>
                   <Slider
+                    aria-labelledby={marketGrowthLabelId}
+                    aria-describedby={marketGrowthDescriptionId}
                     value={[inputs.marketGrowthRate]}
                     onValueChange={([value]) => updateInput("marketGrowthRate", value)}
                     min={-2}
@@ -214,12 +235,13 @@ export const Calculator = () => {
 
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <Label>Investment Return Rate (annual)</Label>
+                    <Label id={investmentReturnLabelId}>Investment Return Rate (annual)</Label>
                     <span className="text-sm font-semibold text-accent">
                       {inputs.investmentReturn}%
                     </span>
                   </div>
                   <Slider
+                    aria-labelledby={investmentReturnLabelId}
                     value={[inputs.investmentReturn]}
                     onValueChange={([value]) => updateInput("investmentReturn", value)}
                     min={0}
