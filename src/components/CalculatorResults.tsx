@@ -45,26 +45,42 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
 
     // Calculate monthly mortgage payment using the mortgage formula
     const monthlyMortgage =
-      loanAmount *
-      (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
-      (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+      monthlyInterestRate === 0
+        ? loanAmount / numberOfPayments
+        : loanAmount *
+          (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
+          (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
 
     const yearlyData: YearData[] = [];
     let cumulativeBuyCost = downPayment;
     let cumulativeRentCost = 0;
-    let investmentBalance = downPayment; // For renters, this is opportunity cost
+    const initialInvestment = downPayment;
+    let investmentBalance = initialInvestment;
     let currentRent = monthlyRent;
     let currentHomeValue = homePrice;
+    let remainingLoanBalance = loanAmount;
 
     for (let year = 0; year <= yearsToCompare; year++) {
       if (year > 0) {
         // Update home value with appreciation
         currentHomeValue *= 1 + homeAppreciation / 100;
-        
-        // Annual costs for buying
-        const annualMortgage = monthlyMortgage * 12;
+
+        // Annual costs for buying (principal + interest actually paid this year)
+        let annualMortgagePaid = 0;
+        for (let month = 0; month < 12; month++) {
+          if (remainingLoanBalance <= 0) {
+            break;
+          }
+          const interestPayment = remainingLoanBalance * monthlyInterestRate;
+          const principalPayment = monthlyMortgage - interestPayment;
+          const actualPrincipalPayment = Math.min(principalPayment, remainingLoanBalance);
+          const actualPayment = actualPrincipalPayment + interestPayment;
+          annualMortgagePaid += actualPayment;
+          remainingLoanBalance -= actualPrincipalPayment;
+        }
+
         const annualOwnershipCosts = (currentHomeValue * ownershipCostsRate) / 100;
-        const totalAnnualBuyCost = annualMortgage + annualOwnershipCosts;
+        const totalAnnualBuyCost = annualMortgagePaid + annualOwnershipCosts;
 
         cumulativeBuyCost += totalAnnualBuyCost;
 
@@ -72,18 +88,20 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
         const annualRent = currentRent * 12;
         cumulativeRentCost += annualRent;
         
-        // Update investment balance (opportunity cost of down payment)
+        // Update investment balance (independent renter portfolio growth)
         investmentBalance *= 1 + investmentReturn / 100;
-        investmentBalance += totalAnnualBuyCost - annualRent;
 
         // Update rent for next year
         currentRent *= 1 + rentIncrease / 100;
       }
 
+      const equity = currentHomeValue - remainingLoanBalance;
+      const netInvestmentGain = investmentBalance - initialInvestment;
+
       yearlyData.push({
         year,
-        buyCost: Math.round(cumulativeBuyCost - (currentHomeValue - homePrice)), // Subtract equity gain
-        rentCost: Math.round(cumulativeRentCost - investmentBalance),
+        buyCost: Math.round(cumulativeBuyCost - equity),
+        rentCost: Math.round(cumulativeRentCost - netInvestmentGain),
       });
     }
 
@@ -99,7 +117,7 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
       finalRentCost,
       difference,
       isBuyingCheaper,
-      equityBuilt: currentHomeValue - homePrice + downPayment,
+      equityBuilt: currentHomeValue - remainingLoanBalance,
     };
   }, [inputs]);
 
