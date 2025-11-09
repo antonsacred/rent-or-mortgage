@@ -58,6 +58,9 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
     let currentRent = monthlyRent;
     let currentHomeValue = homePrice;
     let remainingLoanBalance = loanAmount;
+    let totalMortgagePaid = 0;
+    let totalOwnershipCostsPaid = 0;
+    let finalNetInvestmentGain = 0;
 
     for (let year = 0; year <= yearsToCompare; year++) {
       if (year > 0) {
@@ -82,6 +85,8 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
         const totalAnnualBuyCost = annualMortgagePaid + annualOwnershipCosts;
 
         cumulativeBuyCost += totalAnnualBuyCost;
+        totalMortgagePaid += annualMortgagePaid;
+        totalOwnershipCostsPaid += annualOwnershipCosts;
 
         // Annual costs for renting
         const annualRent = currentRent * 12;
@@ -96,6 +101,7 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
 
       const equity = currentHomeValue - remainingLoanBalance;
       const netInvestmentGain = investmentBalance - initialInvestment;
+      finalNetInvestmentGain = netInvestmentGain;
 
       yearlyData.push({
         year,
@@ -117,6 +123,12 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
       difference,
       isBuyingCheaper,
       equityBuilt: currentHomeValue - remainingLoanBalance,
+      downPayment,
+      totalMortgagePaid,
+      totalOwnershipCostsPaid,
+      totalBuyCashOut: cumulativeBuyCost,
+      totalRentPaid: cumulativeRentCost,
+      netInvestmentGain: finalNetInvestmentGain,
     };
   }, [inputs]);
 
@@ -246,6 +258,85 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
               <span className="text-lg font-semibold text-accent">
                 {formatCurrency(calculations.equityBuilt)}
               </span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Detailed Breakdown</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-2 gap-6 text-sm">
+            <div className="space-y-3">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                Buying
+              </p>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span>Down Payment</span>
+                  <span className="font-semibold">
+                    {formatCurrency(calculations.downPayment)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Mortgage Payments</span>
+                  <span className="font-semibold">
+                    {formatCurrency(calculations.totalMortgagePaid)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Ownership Costs</span>
+                  <span className="font-semibold">
+                    {formatCurrency(calculations.totalOwnershipCostsPaid)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Total Cash Out</span>
+                  <span className="font-semibold">
+                    {formatCurrency(calculations.totalBuyCashOut)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Equity Built</span>
+                  <span className="font-semibold text-accent">
+                    {formatCurrency(calculations.equityBuilt)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Net Buy Cost</span>
+                  <span className="font-semibold text-primary">
+                    {formatCurrency(calculations.finalBuyCost)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                Renting
+              </p>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span>Total Rent Paid</span>
+                  <span className="font-semibold text-destructive">
+                    {formatCurrency(calculations.totalRentPaid)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Investment Growth</span>
+                  <span className="font-semibold text-accent">
+                    {formatCurrency(calculations.netInvestmentGain)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Net Rent Cost</span>
+                  <span className="font-semibold text-destructive">
+                    {formatCurrency(calculations.finalRentCost)}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </CardContent>
