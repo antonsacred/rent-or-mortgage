@@ -22,7 +22,7 @@ const defaultInputs: CalculatorInputs = {
   interestRate: 6.5,
   loanTerm: 30,
   monthlyRent: 2000,
-  ownershipCostsRate: 2.7,
+  ownershipCostsRate: 2,
   marketGrowthRate: 3,
   investmentReturn: 7,
   yearsToCompare: 10,
@@ -129,16 +129,11 @@ export const Calculator = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex justify-between items-start gap-2">
+                  <div className="flex justify-between items-center">
                     <Label>Total Ownership Costs (annual %)</Label>
-                    <div className="text-right">
-                      <span className="text-sm font-semibold text-primary block">
-                        {inputs.ownershipCostsRate}%
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {formatCurrency(annualOwnershipCost)}/yr
-                      </span>
-                    </div>
+                    <span className="text-sm font-semibold text-primary">
+                      {inputs.ownershipCostsRate}% ({formatCurrency(annualOwnershipCost)}/yr)
+                    </span>
                   </div>
                   <p className="text-xs text-muted-foreground">
                     Includes property taxes, HOA, insurance, maintenance, repairs
