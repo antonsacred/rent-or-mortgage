@@ -92,8 +92,12 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
         const annualRent = currentRent * 12;
         cumulativeRentCost += annualRent;
         
-        // Update investment balance (independent renter portfolio growth)
+        // Update investment balance (independent renter portfolio growth + cash flow differences)
         investmentBalance *= 1 + investmentReturn / 100;
+        const mortgageRentDiff = annualMortgagePaid - annualRent;
+        if (mortgageRentDiff > 0) {
+          investmentBalance += mortgageRentDiff;
+        }
 
         // Update rent for next year
         currentRent *= 1 + marketGrowthRate / 100;
@@ -253,12 +257,15 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
                 {formatCurrency(inputs.monthlyRent)}
               </span>
             </div>
-            <div className="flex justify-between items-center p-3 bg-accent/10 rounded-lg border-2 border-accent">
-              <span className="text-sm font-medium">Projected Home Equity</span>
+            <div className="flex justify-between items-center p-3 bg-secondary/50 rounded-lg">
+              <span className="text-sm font-medium">Monthly Mortgage Excess Invested</span>
               <span className="text-lg font-semibold text-accent">
-                {formatCurrency(calculations.equityBuilt)}
+                {formatCurrency(Math.max(0, calculations.monthlyMortgage - inputs.monthlyRent))}
               </span>
             </div>
+            <p className="text-xs text-muted-foreground text-right">
+              Only invested when the mortgage payment exceeds monthly rent.
+            </p>
           </div>
         </CardContent>
       </Card>
