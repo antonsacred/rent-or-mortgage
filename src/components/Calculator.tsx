@@ -151,7 +151,7 @@ export const Calculator = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Rental & Investment Details</CardTitle>
+                <CardTitle>Rental Details</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
@@ -171,14 +171,37 @@ export const Calculator = () => {
                 </div>
 
                 <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <Label>Years to Compare</Label>
+                    <span className="text-sm font-semibold text-foreground">
+                      {inputs.yearsToCompare} years
+                    </span>
+                  </div>
+                  <Slider
+                    value={[inputs.yearsToCompare]}
+                    onValueChange={([value]) => updateInput("yearsToCompare", value)}
+                    min={1}
+                    max={30}
+                    step={1}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Investment Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-2">
                   <div className="flex justify-between items-start gap-2">
-                    <Label>Market Growth Rate (annual)</Label>
+                    <Label>House & Rental Inflation (annual)</Label>
                     <span className="text-sm font-semibold text-primary">
                       {inputs.marketGrowthRate}%
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Applies to both home appreciation and yearly rent increases
+                    Drives yearly changes for both home value and rent
                   </p>
                   <Slider
                     value={[inputs.marketGrowthRate]}
@@ -202,22 +225,6 @@ export const Calculator = () => {
                     min={0}
                     max={15}
                     step={0.5}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <Label>Years to Compare</Label>
-                    <span className="text-sm font-semibold text-foreground">
-                      {inputs.yearsToCompare} years
-                    </span>
-                  </div>
-                  <Slider
-                    value={[inputs.yearsToCompare]}
-                    onValueChange={([value]) => updateInput("yearsToCompare", value)}
-                    min={1}
-                    max={30}
-                    step={1}
                   />
                 </div>
               </CardContent>
