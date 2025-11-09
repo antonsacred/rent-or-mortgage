@@ -32,9 +32,7 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
       loanTerm,
       monthlyRent,
       propertyTaxRate,
-      hoaFees,
-      homeInsurance,
-      maintenanceRate,
+      ownershipCostsRate,
       homeAppreciation,
       rentIncrease,
       investmentReturn,
@@ -67,10 +65,9 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
         // Annual costs for buying
         const annualMortgage = monthlyMortgage * 12;
         const annualPropertyTax = (currentHomeValue * propertyTaxRate) / 100;
-        const annualHOA = hoaFees * 12;
-        const annualMaintenance = (currentHomeValue * maintenanceRate) / 100;
+        const annualOwnershipCosts = (currentHomeValue * ownershipCostsRate) / 100;
         const totalAnnualBuyCost =
-          annualMortgage + annualPropertyTax + annualHOA + homeInsurance + annualMaintenance;
+          annualMortgage + annualPropertyTax + annualOwnershipCosts;
 
         cumulativeBuyCost += totalAnnualBuyCost;
 
@@ -80,7 +77,7 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
         
         // Update investment balance (opportunity cost of down payment)
         investmentBalance *= 1 + investmentReturn / 100;
-        investmentBalance += annualMortgage + annualPropertyTax + annualHOA + homeInsurance + annualMaintenance - annualRent;
+        investmentBalance += totalAnnualBuyCost - annualRent;
 
         // Update rent for next year
         currentRent *= 1 + rentIncrease / 100;
@@ -89,7 +86,7 @@ export const CalculatorResults = ({ inputs }: CalculatorResultsProps) => {
       yearlyData.push({
         year,
         buyCost: Math.round(cumulativeBuyCost - (currentHomeValue - homePrice)), // Subtract equity gain
-        rentCost: Math.round(cumulativeRentCost + investmentBalance),
+        rentCost: Math.round(cumulativeRentCost - investmentBalance),
       });
     }
 

@@ -12,9 +12,7 @@ export interface CalculatorInputs {
   loanTerm: number;
   monthlyRent: number;
   propertyTaxRate: number;
-  hoaFees: number;
-  homeInsurance: number;
-  maintenanceRate: number;
+  ownershipCostsRate: number;
   homeAppreciation: number;
   rentIncrease: number;
   investmentReturn: number;
@@ -28,9 +26,7 @@ const defaultInputs: CalculatorInputs = {
   loanTerm: 30,
   monthlyRent: 2000,
   propertyTaxRate: 1.2,
-  hoaFees: 200,
-  homeInsurance: 1200,
-  maintenanceRate: 1,
+  ownershipCostsRate: 1.5,
   homeAppreciation: 3,
   rentIncrease: 3,
   investmentReturn: 7,
@@ -145,48 +141,19 @@ export const Calculator = () => {
 
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <Label>HOA Fees (monthly)</Label>
+                    <Label>Total Ownership Costs (annual %)</Label>
                     <span className="text-sm font-semibold text-primary">
-                      ${inputs.hoaFees.toLocaleString()}
+                      {inputs.ownershipCostsRate}%
                     </span>
                   </div>
+                  <p className="text-xs text-muted-foreground">
+                    Includes HOA, insurance, maintenance, repairs
+                  </p>
                   <Slider
-                    value={[inputs.hoaFees]}
-                    onValueChange={([value]) => updateInput("hoaFees", value)}
+                    value={[inputs.ownershipCostsRate]}
+                    onValueChange={([value]) => updateInput("ownershipCostsRate", value)}
                     min={0}
-                    max={1000}
-                    step={25}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <Label>Home Insurance (annual)</Label>
-                    <span className="text-sm font-semibold text-primary">
-                      ${inputs.homeInsurance.toLocaleString()}
-                    </span>
-                  </div>
-                  <Slider
-                    value={[inputs.homeInsurance]}
-                    onValueChange={([value]) => updateInput("homeInsurance", value)}
-                    min={500}
-                    max={5000}
-                    step={100}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <Label>Maintenance Cost Rate (annual)</Label>
-                    <span className="text-sm font-semibold text-primary">
-                      {inputs.maintenanceRate}%
-                    </span>
-                  </div>
-                  <Slider
-                    value={[inputs.maintenanceRate]}
-                    onValueChange={([value]) => updateInput("maintenanceRate", value)}
-                    min={0}
-                    max={3}
+                    max={5}
                     step={0.1}
                   />
                 </div>
