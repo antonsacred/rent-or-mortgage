@@ -25,7 +25,7 @@ const defaultInputs: CalculatorInputs = {
   ownershipCostsRate: 2,
   marketGrowthRate: 3,
   investmentReturn: 7,
-  yearsToCompare: 10,
+  yearsToCompare: 20,
 };
 
 export const Calculator = () => {
@@ -181,7 +181,7 @@ export const Calculator = () => {
                     value={[inputs.yearsToCompare]}
                     onValueChange={([value]) => updateInput("yearsToCompare", value)}
                     min={1}
-                    max={30}
+                    max={40}
                     step={1}
                   />
                 </div>
